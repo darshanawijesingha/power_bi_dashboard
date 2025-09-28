@@ -20,13 +20,15 @@ As a data analyst, the task was to help MyGym:
 ## 📊 Dashboard Overview
 The dashboard consists of **two pages**:
 
-1. **Summary Dashboard (`/summery.png`)**  
+1. **Summary Dashboard**
+   ![Summary Dashboard](summary.png)
    - High-level KPIs on revenue, retention, and member activity  
    - Facility-wise revenue contribution  
    - Customer segmentation by subscription and discount types  
    - Geographic and location-based usage insights  
 
-2. **Detailed Insights (`disc.png`)**  
+3. **Detailed Insights**
+   ![Detailed Insights](disc.png)
    - Engagement segmentation (high, moderate, low)  
    - Busy hours and peak facility usage  
    - Age-wise attendance patterns across weekdays  
