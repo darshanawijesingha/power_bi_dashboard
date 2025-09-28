@@ -1,3 +1,58 @@
-fitness_summary.txt
-health_usage.txt
-engagement_levels.txt
+-----------------------------------Fitness Dashboard Summary--------------------------------------------
+
+VAR TotalMembers = COUNTROWS('Fitness_Membership_Analytics_Dataset (1)')
+VAR TotalRevenue = SUM('Fitness_Membership_Analytics_Dataset (1)'[final_price])
+VAR AvgRevenue = DIVIDE(TotalRevenue, TotalMembers, 0)
+VAR ActiveMembers = CALCULATE(COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), 
+    DATEDIFF('Fitness_Membership_Analytics_Dataset (1)'[last_visit_date], TODAY(), DAY) <= 74)
+VAR RetentionRate = DIVIDE(ActiveMembers, TotalMembers, 0)
+VAR AvgVisits = AVERAGE('Fitness_Membership_Analytics_Dataset (1)'[visit_per_week])
+
+RETURN
+"FITNESS SUMMARY    :"& UNICHAR(10) & UNICHAR(10) &
+"Total Members:     :"& FORMAT(TotalMembers, "#,##0") & UNICHAR(10) &
+"Monthly Revenue: $ :"& FORMAT(TotalRevenue, "#,##0") & UNICHAR(10) &
+"Avg Member Value: $:"& FORMAT(AvgRevenue, "#,##0.00") & UNICHAR(10) &
+"Active Members:    :"& FORMAT(ActiveMembers, "#,##0") & " (" & FORMAT(RetentionRate, "0.0%") & ")" & UNICHAR(10) &
+"Avg Weekly Visits: :"& FORMAT(AvgVisits, "0.00")
+
+-----------------------------------Health & Usage Dashboard--------------------------------------------
+
+VAR TotalMembers = COUNTROWS('Fitness_Membership_Analytics_Dataset (1)')
+VAR ActiveMembers = CALCULATE(COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), 
+    DATEDIFF('Fitness_Membership_Analytics_Dataset (1)'[last_visit_date], TODAY(), DAY) <= 74)
+VAR RetentionRate = DIVIDE(ActiveMembers, TotalMembers, 0)
+VAR AvgVisits = AVERAGE('Fitness_Membership_Analytics_Dataset (1)'[visit_per_week])
+VAR AvgDuration = AVERAGE('Fitness_Membership_Analytics_Dataset (1)'[duration_in_gym_minutes])
+
+RETURN
+"Member Health: " & UNICHAR(10) & UNICHAR(10) &
+  FORMAT(ActiveMembers, "#,##0") & "/" & FORMAT(TotalMembers, "#,##0") & 
+" (" & FORMAT(RetentionRate, "0%") & ")" & UNICHAR(10) &
+"Usage: " & UNICHAR(10) & UNICHAR(10) 
+ & FORMAT(AvgVisits, "0.0") & " visits/wk | " & 
+FORMAT(AvgDuration, "0") & " min avg"
+
+
+
+
+-----------------------------------Engagement Levels-----------------------------------------------------
+
+VAR HighlyEngaged = CALCULATE(COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), 
+    'Fitness_Membership_Analytics_Dataset (1)'[visit_per_week] >= 4 &&
+    'Fitness_Membership_Analytics_Dataset (1)'[duration_in_gym_minutes] >= 60)
+VAR ModeratelyEngaged = CALCULATE(COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), 
+    'Fitness_Membership_Analytics_Dataset (1)'[visit_per_week] >= 2 && 
+    'Fitness_Membership_Analytics_Dataset (1)'[visit_per_week] < 4 &&
+    'Fitness_Membership_Analytics_Dataset (1)'[duration_in_gym_minutes] >= 30)
+VAR LowEngaged = CALCULATE(COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), 
+    'Fitness_Membership_Analytics_Dataset (1)'[visit_per_week] < 2)
+
+RETURN
+"ENGAGEMENT LEVELS" & UNICHAR(10) & UNICHAR(10) &
+"Highly Engaged: " & FORMAT(HighlyEngaged, "#,##0") & " (" & 
+FORMAT(HighlyEngaged/COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), "0%") & ")" & UNICHAR(10) &
+"Moderately Engaged: " & FORMAT(ModeratelyEngaged, "#,##0") & " (" & 
+FORMAT(ModeratelyEngaged/COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), "0%") & ")" & UNICHAR(10) &
+"Low Engaged: " & FORMAT(LowEngaged, "#,##0") & " (" & 
+FORMAT(LowEngaged/COUNTROWS('Fitness_Membership_Analytics_Dataset (1)'), "0%") & ")"
