@@ -21,7 +21,7 @@ As a data analyst, the task was to help MyGym:
 The dashboard consists of **two pages**:
 
 1. **Summary Dashboard**
-   ![Summary Dashboard](summary.png)
+   ![Summary Dashboard](summery.png)
    - High-level KPIs on revenue, retention, and member activity  
    - Facility-wise revenue contribution  
    - Customer segmentation by subscription and discount types  
